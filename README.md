@@ -1,18 +1,18 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <h1 align="center">Automated web testing and scraper for search result metrics</h1>
+  <h1 align="center">Web Scraping for Search Metrics with Configurable Parameters</h1>
 </p>
 <!-- PROJECT LOGO -->
 
-[![GitHub stars](https://img.shields.io/github/stars/calvindotsg/auto-web-test)](./portfolio/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/calvindotsg/auto-web-test)](./portfolio/network)
-[![GitHub issues](https://img.shields.io/github/issues/calvindotsg/auto-web-test)](./portfolio/issues)
-[![GitHub license](https://img.shields.io/github/license/calvindotsg/auto-web-test)](./portfolio/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/calvindotsg/web-test)](./portfolio/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/calvindotsg/web-test)](./portfolio/network)
+[![GitHub issues](https://img.shields.io/github/issues/calvindotsg/web-test)](./portfolio/issues)
+[![GitHub license](https://img.shields.io/github/license/calvindotsg/web-test)](./portfolio/blob/master/LICENSE)
 
 ## Overview
 
-For the purpose of automated web testing with Selenium, this Python project automates the process of web scraping specific elements from a website based on a list of keywords. The program navigates to a specified search URL for each keyword, captures a screenshot, and extracts specific text elements using BeautifulSoup. The captured metrics are stored in an output CSV file for further analysis.
+This Python project is an enhancement of a web scraping tool designed to extract specific elements from a website based on a list of keywords. It navigates to a specific search URL, takes a screenshot, and captures text elements. All configurations and parameters, such as the website URL and the text to find, are now loaded from a YAML configuration file. Metrics are stored in an output CSV file.
 
 ## Technologies Used
 
@@ -20,49 +20,61 @@ For the purpose of automated web testing with Selenium, this Python project auto
 - Selenium WebDriver
 - BeautifulSoup
 - Pandas
+- YAML
 
 ## Requirements
 
-To run this project, you need to install the following Python packages:
+To run this project, you need to install the required Python packages:
 
 ```bash
-pip install selenium pandas beautifulsoup4
+pip install selenium pandas beautifulsoup4 pyyaml
 ```
 
-Also, make sure to download the appropriate [WebDriver](https://www.selenium.dev/documentation/en/webdriver/driver_requirements/) for the browser you are using.
+Also, download the appropriate [WebDriver](https://www.selenium.dev/documentation/en/webdriver/driver_requirements/) for the browser you are using.
 
 ## Features
 
-- Captures page load time for each keyword search.
-- Takes a screenshot for each keyword's search result.
-- Extracts and stores specific text elements like logo, MCC, and Merchant Name.
-- Logs all the metrics into an output CSV file.
+- Page load time capture.
+- Screenshot taking.
+- Text element extraction.
+- Configuration from YAML file.
+- Unit tests for code validation (`test_main.py`).
 
 ## How to Use
 
 1. Clone this repository.
-2. Add a CSV file named `top5.csv` in the `assets` directory, with a column named `keyword` listing the keywords you want to test.
-3. Update the `website` variable to point to your target search URL.
-4. Run the script:
+2. Modify `config.yaml` to set your configurations like `website`, `inputFile`, `outputFile`, and string match parameters.
+3. Add a CSV file with keywords based on your `inputFile` configuration.
+4. Run the main script:
 
 ```bash
 python main.py
 ```
 
+To run unit tests, execute:
+
+```bash
+python -m unittest test_main.py
+```
+
 ## Code Structure
 
-The code is organized into modular functions, each responsible for a specific task:
+The code is divided into modular functions, each doing a specific task:
 
 - `initialize_driver()`: Initializes WebDriver.
-- `read_keywords_from_csv(file_path)`: Reads keywords from the input CSV file.
+- `read_keywords_from_csv(file_path)`: Reads keywords from the input CSV.
 - `capture_page_load_time(start_time)`: Captures page load time.
 - `capture_http_status(driver)`: Captures HTTP status code.
 - `take_screenshot(driver, keyword, file_name)`: Takes screenshots.
 - `save_metrics(df, index, page_load_time, elements_retrieved)`: Saves metrics into a DataFrame.
 - `find_elements_from_source(soup_string, str1, sub2)`: Extracts specific text elements.
-- `retrieve_elements(driver)`: Captures number of results and other text elements.
-- `export_to_csv(df, output_file_path)`: Exports the DataFrame to an output CSV file.
+- `retrieve_elements(driver)`: Extracts multiple text elements.
+- `export_to_csv(df, output_file_path)`: Exports DataFrame to CSV.
 - `main()`: Main function to control the flow.
+
+## Testing
+
+The project includes a `test_main.py` file that contains unit tests for the different functionalities.
 
 ## License
 
@@ -70,7 +82,7 @@ This project is open-source and available under the MIT License.
 
 ## Contributing
 
-Contributions are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome. For major changes, please open an issue first to discuss what you would like to add or modify.
 
 ## Author
 

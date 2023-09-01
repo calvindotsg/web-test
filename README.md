@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <h1 align="center">Web Scraping for Search Metrics with Configurable Parameters</h1>
+  <h1 align="center">Automated web testing and web scraping for search metrics with configurable parameters</h1>
 </p>
 <!-- PROJECT LOGO -->
 
@@ -12,7 +12,7 @@
 
 ## Overview
 
-This Python project is an enhancement of a web scraping tool designed to extract specific elements from a website based on a list of keywords. It navigates to a specific search URL, takes a screenshot, and captures text elements. All configurations and parameters, such as the website URL and the text to find, are now loaded from a YAML configuration file. Metrics are stored in an output CSV file.
+For the purpose of automated web testing with Selenium, this Python project is a web scraping tool designed to extract specific elements from a website based on a list of keywords. It navigates to a specific search URL, takes a screenshot, and captures text elements. All configurations and parameters, such as the website URL and the text to find, are now loaded from a YAML configuration file. Metrics are stored in an output CSV file.
 
 ## Technologies Used
 

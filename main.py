@@ -53,13 +53,13 @@ def take_screenshot(driver, keyword, file_name):
 # Save metrics to DataFrame
 def save_metrics(df, index, page_load_time, elements_retrieved):
     df.at[index, 'Page Load Time'] = page_load_time
-    df.at[index, 'Logo'] = elements_retrieved["logo"]
     df.at[index, 'MCC'] = elements_retrieved["mcc"]
     df.at[index, 'Merchant Name'] = elements_retrieved["merchant_name"]
+    df.at[index, 'Logo'] = elements_retrieved["logo"]
     # df.at[index, 'HTTP Status Code'] = http_status_code
 
 
-def find_elements_from_source(soup_string, str1, sub2):
+def find_elements_from_source(soup_string, str1, sub2, elementName):
 
     # try block to handle exceptions when substring is not found in http source
     try:
@@ -73,14 +73,14 @@ def find_elements_from_source(soup_string, str1, sub2):
             res = res + soup_string[idx]
 
     except ValueError as ve:
-        res = "Not found substring in source"
-        print("Print value error: ", ve)
+        res = "Not found substring in source for " + elementName + " element"
+        print("Print value error " + elementName + " element: ", ve)
     except Exception as e:
-        res = "Exception occurred while finding substring in source"
-        print("Print error: ", e)
+        res = "Exception occurred while finding substring in source " + elementName + " element"
+        print("Print error " + elementName + " element: ", e)
 
     # printing result
-    print("The extracted logo string : " + res)
+    print("The extracted " + elementName + " element string : " + res)
     return str(res)
 
 
@@ -92,15 +92,18 @@ def retrieve_elements(driver):
 
     logo = find_elements_from_source(soup_string,
                                      substring_to_find_elements["logo"]["str1"],
-                                     substring_to_find_elements["logo"]["str2"]
+                                     substring_to_find_elements["logo"]["str2"],
+                                     "logo"
                                      )
     mcc = find_elements_from_source(soup_string,
                                     substring_to_find_elements["mcc"]["str1"],
-                                    substring_to_find_elements["mcc"]["str2"]
+                                    substring_to_find_elements["mcc"]["str2"],
+                                    "mcc"
                                     )
     merchant_name = find_elements_from_source(soup_string,
                                               substring_to_find_elements["merchant_name"]["str1"],
-                                              substring_to_find_elements["merchant_name"]["str2"]
+                                              substring_to_find_elements["merchant_name"]["str2"],
+                                              "merchant_name"
                                               )
 
     # creating a dictionary

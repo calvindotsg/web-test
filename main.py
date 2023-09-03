@@ -45,11 +45,6 @@ def capture_page_load_time(start_time):
     return time.time() - start_time
 
 
-# Capture HTTP status code (using readyState as a proxy)
-def capture_http_status(driver):
-    return driver.execute_script("return document.readyState;")
-
-
 # Take screenshot
 def take_screenshot(driver, keyword, file_name):
     driver.save_screenshot('output/' + keyword + '_' + file_name)
@@ -65,16 +60,24 @@ def save_metrics(df, index, page_load_time, elements_retrieved):
 
 
 def find_elements_from_source(soup_string, str1, sub2):
-    # Logo: initializing substrings
 
-    # getting index of substrings
-    idx1 = soup_string.index(str1)
-    idx2 = soup_string.index(sub2)
+    # try block to handle exceptions when substring is not found in http source
+    try:
+        # getting index of substrings
+        idx1 = soup_string.index(str1)
+        idx2 = soup_string.index(sub2)
 
-    res = ''
-    # getting elements in between
-    for idx in range(idx1 + len(str1), idx2):
-        res = res + soup_string[idx]
+        res = ''
+        # getting elements in between
+        for idx in range(idx1 + len(str1), idx2):
+            res = res + soup_string[idx]
+
+    except ValueError as ve:
+        res = "Not found substring in source"
+        print("Print value error: ", ve)
+    except Exception as e:
+        res = "Exception occurred while finding substring in source"
+        print("Print error: ", e)
 
     # printing result
     print("The extracted logo string : " + res)

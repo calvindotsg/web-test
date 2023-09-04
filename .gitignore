@@ -166,3 +166,4 @@ output/
 /config.yaml
 config.yaml
 *.yaml
+*.db

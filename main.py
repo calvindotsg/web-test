@@ -50,8 +50,8 @@ def take_screenshot(driver, keyword, file_name):
 
 # Save metrics to DataFrame
 def save_metrics(df, index, elements_retrieved):
-    # df.at[index, 'Page Load Time'] = page_load_time
-    df.at[index, 'MCC'] = elements_retrieved["mcc"]
+    df.at[index, 'code MCC'] = elements_retrieved["mcc"]["code"]
+    df.at[index, 'name MCC'] = elements_retrieved["mcc"]["name"]
     df.at[index, 'Merchant Name'] = elements_retrieved["merchant_name"]
     df.at[index, 'Logo'] = elements_retrieved["logo"]
 
@@ -72,20 +72,23 @@ def find_elements_from_source(soup_string, str1, sub2, element_name):
             res = "https://heymax.ai/default-merchant-logo.png"
 
         if element_name == 'mcc':
-            mcc_res = res[:4]
+            mcc_code_res = res[:4]
             mcc_descr_res = res[7:]
-            res = '{"name": "' + mcc_descr_res + '", "code": "' + mcc_res + '"}'
+
+            # creating a dictionary
+            res = {"name": mcc_descr_res, "code": mcc_code_res}
 
     except ValueError as ve:
-        res = "Not found substring in source for " + element_name + " element"
+        # res = "Not found substring in source for " + element_name + " element"
         print("Print value error " + element_name + " element: ", ve)
     except Exception as e:
-        res = "Exception occurred while finding substring in source " + element_name + " element"
+        # res = "Exception occurred while finding substring in source " + element_name + " element"
         print("Print error " + element_name + " element: ", e)
 
     # printing result
-    print("The extracted " + element_name + " element string : " + res)
-    return str(res)
+    print("The extracted " + element_name + " element string : " + str(res))
+    # return as dictionary
+    return res
 
 
 # Capture Number of Results and other text elements
@@ -134,27 +137,27 @@ def create_table(cursor):
     #     DROP TABLE metrics
     #     """)
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS metrics (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        num TEXT,
-        keyword TEXT,
-        logo TEXT,
-        mcc TEXT,
-        merchant_name TEXT,
-        missing_logo_ind TEXT,
-        incorrect_logo_ind TEXT,
-        incorrect_merchant_name TEXT
-    )
-    """)
+        CREATE TABLE IF NOT EXISTS merchant_affiliation (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            document_id TEXT,
+            merchant_name TEXT,
+            merchant_description TEXT,
+            merchant_icon TEXT,
+            mcc_code TEXT,
+            mcc_name TEXT,
+            mcc_string TEXT
+        );
+        """)
 
 
 # Insert Data
-def insert_data(cursor, num, keyword, elements_retrieved):
-    cursor.execute("INSERT INTO metrics (num, keyword, logo, mcc, merchant_name, missing_logo_ind, "
-                   "incorrect_logo_ind, incorrect_merchant_name) "
-                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                   (num, keyword, elements_retrieved["logo"],
-                    elements_retrieved["mcc"], elements_retrieved["merchant_name"], '', '', ''))
+def insert_data(cursor, elements_retrieved):
+    cursor.execute("INSERT INTO merchant_affiliation (document_id, merchant_name, merchant_description, merchant_icon, "
+                   "mcc_code, mcc_name, mcc_string) "
+                   "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                   (None, elements_retrieved["merchant_name"], None, elements_retrieved["logo"],
+                    elements_retrieved["mcc"]["code"], elements_retrieved["mcc"]["name"],
+                    str(elements_retrieved["mcc"])))
 
 
 # Main function to control the flow
@@ -166,6 +169,7 @@ def main():
     create_table(cursor)
 
     for index, row in keywords_df.iterrows():
+        print('Starting keyword: ' + row['keyword'])
         site = website + row['keyword']
         driver.get(site)
         # wait for page to load
@@ -174,7 +178,7 @@ def main():
         take_screenshot(driver, row['keyword'], f"{index + 1}")
         # Copy text elements and other related metrics.
         save_metrics(keywords_df, index, elements_retrieved)
-        insert_data(cursor, str(index + 1), row['keyword'], elements_retrieved)
+        insert_data(cursor, elements_retrieved)
 
     export_to_csv(keywords_df, outputFile)
     conn.commit()

@@ -5,10 +5,10 @@
 </p>
 <!-- PROJECT LOGO -->
 
-[![GitHub stars](https://img.shields.io/github/stars/calvindotsg/web-test)](./portfolio/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/calvindotsg/web-test)](./portfolio/network)
-[![GitHub issues](https://img.shields.io/github/issues/calvindotsg/web-test)](./portfolio/issues)
-[![GitHub license](https://img.shields.io/github/license/calvindotsg/web-test)](./portfolio/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/calvindotsg/web-test)](./web-test/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/calvindotsg/web-test)](./web-test/network)
+[![GitHub issues](https://img.shields.io/github/issues/calvindotsg/web-test)](./web-test/issues)
+[![GitHub license](https://img.shields.io/github/license/calvindotsg/web-test)](./web-test/blob/master/LICENSE)
 
 ## Overview
 
